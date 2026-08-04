@@ -70,13 +70,13 @@ export const skillCards = [
 export const projects = [
   {
     id: 1,
-    title: "Student Management System",
-    desc: "A comprehensive web-based application for managing student records, grades, and academic information. The system includes admin dashboard, student portal, and faculty modules.",
+    title: "BPI Portal (Student Management System)",
+    desc: "A comprehensive web-based application built with React for managing student records, grades, and academic information. The system includes admin dashboard, student portal, and faculty modules.",
     image: "https://images.unsplash.com/photo-1580894894513-541e068a3e2b?auto=format&fit=crop&w=800&q=80",
     category: "system",
-    tags: ["HTML", "CSS", "JavaScript", "PHP"],
-    liveUrl: "https://student-managemant-system.free.nf/",
-    githubUrl: "https://github.com/rksaykot999/st-management",
+    tags: ["React", "JavaScript", "Tailwind CSS"],
+    liveUrl: "https://bpi-portal-web.vercel.app/",
+    githubUrl: "https://github.com/rksaykot999/BPI_Portal.git",
     featured: true,
     stats: { efficiency: "95%", users: "500+", rating: "4.8" },
   },
