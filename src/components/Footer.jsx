@@ -57,7 +57,7 @@ export default function Footer() {
         <div className="grid gap-10 pt-14 sm:grid-cols-2 md:grid-cols-[1.3fr_0.7fr_0.7fr_1fr]">
           <div>
             <Link to="/" className="font-display text-lg font-semibold tracking-tight">
-              RK SAYKOT
+              SAYKOT
             </Link>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-base-content/55">
               Full-stack developer building web and mobile products end to end —
