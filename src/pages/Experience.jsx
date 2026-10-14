@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '../lib/api';
 import { useReveal } from '../lib/useReveal';
+import { usePageSEO } from '../lib/usePageSEO';
 import SectionHeading from '../components/ui/SectionHeading';
 import ExperienceItem from '../components/cards/ExperienceItem';
 import CtaBanner from '../components/ui/CtaBanner';
@@ -26,6 +27,11 @@ const beyondResume = [
 ];
 
 export default function Experience() {
+  usePageSEO({
+    title: 'Work Experience & Education',
+    description: 'Professional experience, freelance work, education (Diploma in Computer Science & Technology), and tutoring history of RK Saykot.'
+  });
+
   const [items, setItems] = useState([]);
   const [status, setStatus] = useState('loading');
 

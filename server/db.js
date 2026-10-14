@@ -21,9 +21,9 @@ const defaultData = {
   certifications: [],
   messages: [],
   config: {
-    heroTitle: "Saykot — Full-Stack Developer",
+    heroTitle: "RK Saykot — Full-Stack Developer",
     heroSubtitle: "Building software, on purpose.",
-    aboutBio: "I'm Saykot, also known online as RK Saykot — a freelance web developer and a Computer Engineering student living in Dhaka.",
+    aboutBio: "I'm RK Saykot — a freelance web developer and a Computer Engineering student living in Dhaka.",
     contactLocation: "Dhaka",
     socialLinks: {
       github: "https://github.com/rksaykot999",

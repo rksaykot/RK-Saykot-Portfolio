@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '../lib/api';
 import { useReveal } from '../lib/useReveal';
+import { usePageSEO } from '../lib/usePageSEO';
 import SectionHeading from '../components/ui/SectionHeading';
 import ProjectCard from '../components/cards/ProjectCard';
 import CtaBanner from '../components/ui/CtaBanner';
@@ -14,6 +15,11 @@ const process = [
 ];
 
 export default function Projects() {
+  usePageSEO({
+    title: 'Featured Projects',
+    description: 'Explore live web apps, websites, and mobile applications built by RK Saykot — including Student Management System, People E Sheba, and My Messenger.'
+  });
+
   const [projects, setProjects] = useState([]);
   const [status, setStatus] = useState('loading');
 

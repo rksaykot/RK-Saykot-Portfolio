@@ -4,7 +4,7 @@ import { api } from '../../lib/api';
 export default function AdminHomepage() {
   const [config, setConfig] = useState({
     heroTitle: 'Full-Stack Developer',
-    heroName: 'Saykot',
+    heroName: 'RK Saykot',
     heroDescription: 'I build web and mobile products end to end — React and Next.js on the frontend, Node.js and MySQL underneath. Currently working as a freelance developer, and studying Computer Engineering on the side.',
     currentProjectName: 'People E Sheba',
     currentProjectDesc: 'A comprehensive React-based community services platform built with Node.js, MySQL, and Tailwind CSS.',
@@ -31,7 +31,7 @@ export default function AdminHomepage() {
         const data = await api.getConfig();
         setConfig({
           heroTitle: data.heroTitle || 'Full-Stack Developer',
-          heroName: data.heroName || 'Saykot',
+          heroName: data.heroName || 'RK Saykot',
           heroDescription: data.heroDescription || 'I build web and mobile products end to end — React and Next.js on the frontend, Node.js and MySQL underneath. Currently working as a freelance developer, and studying Computer Engineering on the side.',
           currentProjectName: data.currentProjectName || 'People E Sheba',
           currentProjectDesc: data.currentProjectDesc || 'A comprehensive React-based community services platform built with Node.js, MySQL, and Tailwind CSS.',

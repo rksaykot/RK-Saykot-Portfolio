@@ -57,7 +57,7 @@ export default function Footer() {
         <div className="grid gap-10 pt-14 sm:grid-cols-2 md:grid-cols-[1.3fr_0.7fr_0.7fr_1fr]">
           <div>
             <Link to="/" className="font-display text-lg font-semibold tracking-tight">
-              SAYKOT
+              RK SAYKOT
             </Link>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-base-content/55">
               Full-stack developer building web and mobile products end to end —
@@ -106,7 +106,7 @@ export default function Footer() {
 
       <div className="relative border-t border-base-300">
         <div className="mx-auto flex max-w-6xl flex-row items-center justify-between gap-4 px-6 py-6 font-mono text-xs text-base-content/40">
-          <p>© {new Date().getFullYear()} Saykot. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} RK Saykot. All rights reserved.</p>
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="group inline-flex items-center gap-1.5 transition-colors hover:text-primary"

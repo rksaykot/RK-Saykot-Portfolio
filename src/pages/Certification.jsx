@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { api } from '../lib/api';
 import { useReveal } from '../lib/useReveal';
+import { usePageSEO } from '../lib/usePageSEO';
 import SectionHeading from '../components/ui/SectionHeading';
 import StatsStrip from '../components/ui/StatsStrip';
 import CtaBanner from '../components/ui/CtaBanner';
@@ -42,6 +43,11 @@ function CertificationCard({ cert, index }) {
 }
 
 export default function Certification() {
+  usePageSEO({
+    title: 'Verified Certifications',
+    description: 'Verified academic, technical, and professional certifications completed by RK Saykot across multiple institutes.'
+  });
+
   const [certs, setCerts] = useState([]);
   const [status, setStatus] = useState('loading');
   const [activeCat, setActiveCat] = useState('All');

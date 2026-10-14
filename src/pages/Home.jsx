@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { ArrowRight, ArrowUpRight, Code2, Layers, Rocket } from 'lucide-react';
 import { api } from '../lib/api';
 import { useReveal } from '../lib/useReveal';
+import { usePageSEO } from '../lib/usePageSEO';
 import Marquee from '../components/ui/Marquee';
 import StatsStrip from '../components/ui/StatsStrip';
 import CtaBanner from '../components/ui/CtaBanner';
@@ -16,6 +17,11 @@ import ProjectCard from '../components/cards/ProjectCard';
 
 
 export default function Home() {
+  usePageSEO({
+    title: 'Home',
+    description: 'Official portfolio of RK Saykot — Full-Stack Developer and Computer Engineering student based in Dhaka, Bangladesh. Building scalable web and mobile applications with React, Next.js, Node.js, and MySQL.'
+  });
+
   const [projects, setProjects] = useState([]);
   const [skillGroups, setSkillGroups] = useState([]);
   const [certs, setCerts] = useState([]);
@@ -103,7 +109,7 @@ export default function Home() {
             </div>
 
             <h1 className="rv rv-d1 mt-5 text-[clamp(2.5rem,6vw,4.2rem)] font-semibold leading-[1.04] tracking-tight">
-              Hi, I'm {siteConfig.heroName || 'Saykot'}.
+              Hi, I'm {siteConfig.heroName || 'RK Saykot'}.
               <span className="mt-2 block text-[0.42em] font-medium leading-snug text-base-content/55">
                 <TypeAnimation
                   sequence={typeSequence}
@@ -138,7 +144,7 @@ export default function Home() {
           {/* Profile Image */}
           <div className="rv rv-d2 relative">
             <div className="rounded-box border border-base-300 bg-base-100/90 p-6 shadow-xl shadow-base-content/[0.03] backdrop-blur-sm">
-              <img src={siteConfig.heroImageUrl || `${import.meta.env.BASE_URL}saykot-photo.png`} alt="Saykot" className="aspect-square h-full w-full object-cover object-center rounded-lg" />
+              <img src={siteConfig.heroImageUrl || `${import.meta.env.BASE_URL}saykot-photo.png`} alt="RK Saykot" className="aspect-square h-full w-full object-cover object-center rounded-lg" />
             </div>
           </div>
         </div>

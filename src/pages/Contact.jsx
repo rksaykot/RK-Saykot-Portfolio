@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { api } from '../lib/api';
 import { useReveal } from '../lib/useReveal';
+import { usePageSEO } from '../lib/usePageSEO';
 import SectionHeading from '../components/ui/SectionHeading';
 import { MapPin, Briefcase, Clock, Link2, CheckCircle2, AlertCircle } from 'lucide-react';
 
@@ -29,6 +30,11 @@ const faqs = [
 ];
 
 export default function Contact() {
+  usePageSEO({
+    title: 'Contact & Hire Me',
+    description: 'Get in touch with RK Saykot for freelance projects, full-stack web development, and software engineering consultations in Dhaka and remotely.'
+  });
+
   const [form, setForm] = useState(initialForm);
   const [state, setState] = useState('idle'); // idle | sending | sent | error
   const [errorMsg, setErrorMsg] = useState('');

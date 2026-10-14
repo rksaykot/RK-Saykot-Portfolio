@@ -1,14 +1,15 @@
 import { useReveal } from '../lib/useReveal';
+import { usePageSEO } from '../lib/usePageSEO';
 import SectionHeading from '../components/ui/SectionHeading';
 import CtaBanner from '../components/ui/CtaBanner';
 import { GraduationCap, PenLine, Users } from 'lucide-react';
 
 const facts = [
-  ['Live in', 'Dhaka'],
+  ['Name', 'RK Saykot'],
+  ['Live in', 'Dhaka, Bangladesh'],
   ['Current role', 'Freelance Web Developer'],
-  ['Status', 'Independent Contractor'],
+  ['Status', 'Available for Projects'],
   ['Education', 'Computer Engineering'],
-  ['Also known as', 'RK Saykot'],
   ['Hobby', 'Bengali creative writing'],
 ];
 
@@ -37,6 +38,11 @@ const beyond = [
 ];
 
 export default function About() {
+  usePageSEO({
+    title: 'About Me',
+    description: 'Learn more about RK Saykot — Full-Stack Developer and Computer Engineering student in Dhaka, Bangladesh. Technical background, approach, and journey.'
+  });
+
   useReveal();
 
   return (
@@ -52,7 +58,7 @@ export default function About() {
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr]">
         <div className="rv rv-d2 space-y-5 text-[1.02rem] leading-relaxed text-base-content/70">
           <p>
-            I'm Saykot, also known online as <strong className="font-medium text-base-content">RK Saykot</strong> — a
+            I'm <strong className="font-medium text-base-content">RK Saykot</strong> — a
             freelance web developer and a Computer
             Engineering student living in Dhaka.
           </p>

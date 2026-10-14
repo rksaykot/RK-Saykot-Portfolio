@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react';
 import { api } from '../lib/api';
 import { useReveal } from '../lib/useReveal';
+import { usePageSEO } from '../lib/usePageSEO';
 import SectionHeading from '../components/ui/SectionHeading';
 import SkillCard from '../components/cards/SkillCard';
 import CtaBanner from '../components/ui/CtaBanner';
 import { LoadingState, ErrorState } from '../components/ui/StatusState';
 
 export default function Skills() {
+  usePageSEO({
+    title: 'Skills & Tech Stack',
+    description: 'Technical skills and technologies of RK Saykot — Frontend (React, Next.js), Backend (Node.js, Express, MySQL), Mobile, Programming languages, and UI design.'
+  });
+
   const [groups, setGroups] = useState([]);
   const [status, setStatus] = useState('loading');
 
