@@ -52,7 +52,7 @@ export default function Certification() {
       .catch(() => setStatus('error'));
   }, []);
 
-  useReveal([certs, activeCat]);
+  useReveal([certs, activeCat, status]);
 
   const filteredCerts = useMemo(() => {
     return activeCat === 'All' ? certs : certs.filter((c) => c.category === activeCat);

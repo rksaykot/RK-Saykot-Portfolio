@@ -16,7 +16,7 @@ export default function Skills() {
       .catch(() => setStatus('error'));
   }, []);
 
-  useReveal([groups]);
+  useReveal([groups, status]);
 
   const totalItems = groups.reduce((sum, g) => sum + g.items.length, 0);
 

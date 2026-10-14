@@ -23,7 +23,7 @@ export default function Projects() {
       .catch(() => setStatus('error'));
   }, []);
 
-  useReveal([projects]);
+  useReveal([projects, status]);
 
   return (
     <div className="pb-16 md:pb-24">

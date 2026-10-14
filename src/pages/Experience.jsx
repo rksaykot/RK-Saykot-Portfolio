@@ -35,7 +35,7 @@ export default function Experience() {
       .catch(() => setStatus('error'));
   }, []);
 
-  useReveal([items]);
+  useReveal([items, status]);
 
   return (
     <div className="pb-16 md:pb-24">
