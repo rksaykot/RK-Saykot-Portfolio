@@ -37,7 +37,9 @@ jobs:
           VITE_BASE: /RK-Saykot-Portfolio/
 
       - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5 # লেটেস্ট v5 এ আপডেট করা হয়েছে
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Upload artifact for Pages
         uses: actions/upload-pages-artifact@v3
