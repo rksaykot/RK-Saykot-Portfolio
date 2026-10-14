@@ -9,12 +9,7 @@ import Marquee from '../components/ui/Marquee';
 import StatsStrip from '../components/ui/StatsStrip';
 import CtaBanner from '../components/ui/CtaBanner';
 import ProjectCard from '../components/cards/ProjectCard';
-
-
-
-
-
-
+import CvDownloadModal from '../components/ui/CvDownloadModal';
 
 export default function Home() {
   usePageSEO({
@@ -22,6 +17,7 @@ export default function Home() {
     description: 'Official portfolio of RK Saykot — Full-Stack Developer and Computer Engineering student based in Dhaka, Bangladesh. Building scalable web and mobile applications with React, Next.js, Node.js, and MySQL.'
   });
 
+  const [cvModalOpen, setCvModalOpen] = useState(false);
   const [projects, setProjects] = useState([]);
   const [skillGroups, setSkillGroups] = useState([]);
   const [certs, setCerts] = useState([]);
@@ -109,7 +105,7 @@ export default function Home() {
             </div>
 
             <h1 className="rv rv-d1 mt-5 text-[clamp(2.5rem,6vw,4.2rem)] font-semibold leading-[1.04] tracking-tight">
-              Hi, I'm {siteConfig.heroName || 'RK Saykot'}.
+              I'm {siteConfig.heroName || 'RK Saykot'}.
               <span className="mt-2 block text-[0.42em] font-medium leading-snug text-base-content/55">
                 <TypeAnimation
                   sequence={typeSequence}
@@ -131,13 +127,13 @@ export default function Home() {
               >
                 View Projects <ArrowRight size={15} />
               </Link>
-              <a
-                href={`${import.meta.env.BASE_URL}${siteConfig.cvUrl || 'Saykot_CV.pdf'}`}
-                download={siteConfig.cvUrl || 'Saykot_CV.pdf'}
+              <button
+                type="button"
+                onClick={() => setCvModalOpen(true)}
                 className="btn btn-outline rounded-full border-base-300 px-6 font-mono text-sm normal-case hover:border-primary hover:bg-transparent hover:text-primary"
               >
                 Download CV
-              </a>
+              </button>
             </div>
           </div>
 
@@ -271,6 +267,13 @@ export default function Home() {
           subtitle={siteConfig.ctaSubtitle || "I'm currently available for freelance projects and full-time roles."}
         />
       </div>
+
+      <CvDownloadModal
+        isOpen={cvModalOpen}
+        onClose={() => setCvModalOpen(false)}
+        cvUrl={`${import.meta.env.BASE_URL}${siteConfig.cvUrl || 'Saykot_CV.pdf'}`}
+        fileName={siteConfig.cvUrl || 'RK_Saykot_CV.pdf'}
+      />
     </div>
   );
 }

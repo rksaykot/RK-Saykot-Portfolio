@@ -189,8 +189,21 @@
   .animate-loader-stamp {
     animation: loader-stamp 0.6s cubic-bezier(.34,1.56,.64,1) both;
   }
-  @keyframes loader-fade-out {
-    to { opacity: 0; visibility: hidden; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .animate-fadeIn {
+    animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-4px); }
+    40%, 80% { transform: translateX(4px); }
+  }
+  .animate-shake {
+    animation: shake 0.35s ease-in-out;
   }
 }
 
