@@ -66,7 +66,7 @@ export default function Navbar() {
           }`}
       >
         <Link to="/" onClick={() => setOpen(false)} className="shrink-0 font-display text-lg font-semibold tracking-tight">
-          RK SAYKOT
+          SAYKOT
         </Link>
 
         <nav
@@ -142,7 +142,7 @@ export default function Navbar() {
         {/* Drawer Header */}
         <div className="flex items-center justify-between px-6 py-6">
           <Link to="/" onClick={() => setOpen(false)} className="font-display text-xl font-bold tracking-tight">
-            RK SAYKOT
+            SAYKOT
           </Link>
           <button
             className="grid h-10 w-10 place-items-center rounded-full bg-base-content/5 text-base-content backdrop-blur-sm transition-colors hover:bg-base-content/10"
