@@ -1,136 +1,183 @@
-import SEO from '../components/SEO';
 import { useState } from 'react';
-import { personalInfo, faqs } from '../data/portfolio';
-import './Contact.css';
+import { api } from '../lib/api';
+import { useReveal } from '../lib/useReveal';
+import SectionHeading from '../components/ui/SectionHeading';
+import { MapPin, Briefcase, Clock, Link2, CheckCircle2, AlertCircle } from 'lucide-react';
+
+const initialForm = { firstName: '', lastName: '', email: '', subject: '', message: '' };
+
+const infoRows = [
+  { icon: MapPin, k: 'Live in', v: 'Dhaka' },
+  { icon: Briefcase, k: 'Current role', v: 'Full-Stack Developer' },
+  { icon: Clock, k: 'Response time', v: 'Within 24–48 hours' },
+  { icon: Link2, k: 'Find me on', v: 'GitHub · LinkedIn' },
+];
+
+const faqs = [
+  {
+    q: 'What kind of projects do you take on?',
+    a: 'Web platforms (React / Next.js), backend APIs (Node.js / MySQL), and Android apps (Kotlin / Jetpack Compose) — from a scoped feature to a full build.',
+  },
+  {
+    q: 'Are you open to remote work?',
+    a: "Yes — I live in Dhaka, and work comfortably with remote and distributed teams.",
+  },
+  {
+    q: "What's the best way to start?",
+    a: 'Send a message with a short project brief — goal, rough timeline, and budget range if you have one. I\'ll reply within 24–48 hours.',
+  },
+];
 
 export default function Contact() {
-  const [openFaq, setOpenFaq] = useState(null);
-  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
-  const [status, setStatus] = useState('');
+  const [form, setForm] = useState(initialForm);
+  const [state, setState] = useState('idle'); // idle | sending | sent | error
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  useReveal();
 
-  const handleSubmit = async (e) => {
+  function update(field) {
+    return (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    setStatus('sending');
+    setState('sending');
+    setErrorMsg('');
     try {
-      const res = await fetch('https://formspree.io/f/meoyzojp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      if (res.ok) {
-        setStatus('success');
-        setFormData({ name: '', email: '', subject: '', message: '' });
-      } else {
-        setStatus('error');
-      }
-    } catch {
-      setStatus('error');
+      await api.sendContact(form);
+      setState('sent');
+      setForm(initialForm);
+      setTimeout(() => setState('idle'), 4000);
+    } catch (err) {
+      setState('error');
+      setErrorMsg(err.message || 'Something went wrong. Please try again.');
     }
-  };
+  }
 
   return (
-    <>
-      <section className="page-header">
-        <div className="container">
-          <div className="page-header-content">
-            <h1>Get In Touch</h1>
-            <p>Let's discuss your next project or just say hello.</p>
-          </div>
-        </div>
-      </section>
+    <div className="pb-16 md:pb-24">
+      <SectionHeading
+        recordNo="06"
+        label="Contact"
+        title="Let's talk about the work."
+        subtitle="Open to freelance projects, full-time roles, and collaboration on web or mobile builds."
+      />
 
-      <section className="contact-section">
-        <div className="container">
-          <div className="contact-container">
-            {/* Contact Info */}
-            <div className="contact-info">
-              <h2 className="section-title">Let's Connect</h2>
-              <p>I'm currently available for freelance work and full-time opportunities. If you have a project or just want to say hello, get in touch.</p>
-
-              <div className="contact-methods">
-                <div className="contact-method">
-                  <div className="contact-icon"><i className="fas fa-envelope"></i></div>
-                  <div className="contact-details">
-                    <h3>Email</h3>
-                    <p>{personalInfo.email}</p>
-                  </div>
+      <div className="mx-auto max-w-6xl px-6 pt-12 md:pt-20">
+        <div className="grid gap-8 md:grid-cols-[0.85fr_1.15fr]">
+        <aside className="rv rv-d2 h-fit rounded-box border border-base-300 bg-base-100 p-6">
+          <span className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-base-content/35">
+            Contact Info
+          </span>
+          <div className="mt-4 divide-y divide-base-300">
+            {infoRows.map(({ icon: Icon, k, v }) => (
+              <div key={k} className="flex items-center gap-3 py-3.5 text-sm">
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-field border border-base-300 bg-base-200 text-primary">
+                  <Icon size={14} />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-xs text-base-content/45">{k}</p>
+                  <p className="truncate font-medium">{v}</p>
                 </div>
-                <div className="contact-method">
-                  <div className="contact-icon"><i className="fas fa-phone"></i></div>
-                  <div className="contact-details">
-                    <h3>Phone</h3>
-                    <p>{personalInfo.phone}</p>
-                  </div>
-                </div>
-                <div className="contact-method">
-                  <div className="contact-icon"><i className="fas fa-map-marker-alt"></i></div>
-                  <div className="contact-details">
-                    <h3>Location</h3>
-                    <p>{personalInfo.location}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="social-links">
-                <a href={personalInfo.linkedin} className="social-link" target="_blank" rel="noreferrer"><i className="fab fa-linkedin-in"></i></a>
-                <a href={personalInfo.github} className="social-link" target="_blank" rel="noreferrer"><i className="fab fa-github"></i></a>
-                <a href={personalInfo.twitter} className="social-link" target="_blank" rel="noreferrer"><i className="fab fa-twitter"></i></a>
-                <a href={personalInfo.instagram} className="social-link" target="_blank" rel="noreferrer"><i className="fab fa-instagram"></i></a>
-              </div>
-            </div>
-
-            {/* Contact Form */}
-            <div className="contact-form-container">
-              <h3>Send Me a Message</h3>
-              <form onSubmit={handleSubmit} className="contact-form">
-                <div className="form-group">
-                  <label className="form-label">Your Name</label>
-                  <input type="text" name="name" value={formData.name} onChange={handleChange} className="form-control" placeholder="Enter your name" required />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Your Email</label>
-                  <input type="email" name="email" value={formData.email} onChange={handleChange} className="form-control" placeholder="Enter your email" required />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Subject</label>
-                  <input type="text" name="subject" value={formData.subject} onChange={handleChange} className="form-control" placeholder="Enter subject" required />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Your Message</label>
-                  <textarea name="message" value={formData.message} onChange={handleChange} className="form-control" placeholder="Enter your message" required></textarea>
-                </div>
-                <button type="submit" className="btn btn-primary submit-btn" disabled={status === 'sending'}>
-                  {status === 'sending' ? 'Sending...' : 'Send Message'}
-                </button>
-                {status === 'success' && <p className="form-success">✅ Message sent successfully!</p>}
-                {status === 'error' && <p className="form-error">❌ Something went wrong. Please try again.</p>}
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="faq-section">
-        <div className="container">
-          <h2 className="section-title">Frequently Asked Questions</h2>
-          <div className="faq-container">
-            {faqs.map((faq, i) => (
-              <div key={i} className={`faq-item ${openFaq === i ? 'open' : ''}`}>
-                <div className="faq-question" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
-                  <span>{faq.q}</span>
-                  <i className={`fas fa-chevron-${openFaq === i ? 'up' : 'down'}`}></i>
-                </div>
-                {openFaq === i && (
-                  <div className="faq-answer"><p>{faq.a}</p></div>
-                )}
               </div>
             ))}
           </div>
+        </aside>
+
+        <form className="rv rv-d3 rounded-box border border-base-300 bg-base-100 p-6 md:p-8" onSubmit={handleSubmit}>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Field id="firstName" label="First name" required value={form.firstName} onChange={update('firstName')} placeholder="Your first name" />
+            <Field id="lastName" label="Last name" value={form.lastName} onChange={update('lastName')} placeholder="Your last name" />
+          </div>
+          <Field id="email" label="Email" type="email" required value={form.email} onChange={update('email')} placeholder="you@example.com" className="mt-5" />
+          <Field id="subject" label="Subject" value={form.subject} onChange={update('subject')} placeholder="Project inquiry" className="mt-5" />
+
+          <div className="mt-5 flex flex-col gap-1.5">
+            <label htmlFor="message" className="font-mono text-xs uppercase tracking-wide text-base-content/50">
+              Message
+            </label>
+            <textarea
+              id="message"
+              required
+              rows={5}
+              value={form.message}
+              onChange={update('message')}
+              placeholder="Tell me about the project, timeline, and budget."
+              className="textarea w-full resize-none rounded-field border-base-300 bg-base-200/40 focus:border-primary focus:outline-none"
+            />
+          </div>
+
+          <button
+            className="btn btn-primary mt-7 w-full rounded-full font-mono text-sm normal-case sm:w-auto sm:px-8"
+            type="submit"
+            disabled={state === 'sending'}
+          >
+            {state === 'sending' ? 'Sending…' : 'Send Message →'}
+          </button>
+
+          {state === 'sent' && (
+            <div className="toast toast-bottom toast-center sm:toast-end z-[100] mb-4">
+              <div className="alert alert-success text-success-content flex items-center gap-2 shadow-lg">
+                <CheckCircle2 size={20} />
+                <span>Message sent successfully!</span>
+              </div>
+            </div>
+          )}
+          {state === 'error' && (
+            <p className="mt-4 flex items-center gap-2 text-sm text-error">
+              <AlertCircle size={16} /> {errorMsg}
+            </p>
+          )}
+        </form>
+      </div>
+
+      {/* ───────── FAQ ───────── */}
+      <div className="mx-auto mt-24 max-w-2xl">
+        <div className="rv text-center">
+          <span className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-primary">
+            Before You Send That
+          </span>
+          <h2 className="mt-2 font-display text-2xl font-semibold">A few quick answers.</h2>
         </div>
-      </section>
-    </>
+
+        <div className="mt-8 space-y-3">
+          {faqs.map((f, i) => (
+            <details
+              key={f.q}
+              className="rv group rounded-box border border-base-300 bg-base-100 px-5 py-1 open:pb-4"
+              style={{ transitionDelay: `${i * 80}ms` }}
+            >
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 font-display text-base font-medium">
+                {f.q}
+                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-base-300 text-base-content/50 transition-transform duration-300 group-open:rotate-45">
+                  +
+                </span>
+              </summary>
+              <p className="text-sm leading-relaxed text-base-content/60">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+      </div>
+    </div>
+  );
+}
+
+function Field({ id, label, type = 'text', required, value, onChange, placeholder, className = '' }) {
+  return (
+    <div className={`flex flex-col gap-1.5 ${className}`}>
+      <label htmlFor={id} className="font-mono text-xs uppercase tracking-wide text-base-content/50">
+        {label}
+      </label>
+      <input
+        id={id}
+        type={type}
+        required={required}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className="input w-full rounded-field border-base-300 bg-base-200/40 focus:border-primary focus:outline-none"
+      />
+    </div>
   );
 }

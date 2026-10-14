@@ -1,271 +1,271 @@
-import SEO from '../components/SEO';
-import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { personalInfo, skillCards, projects } from '../data/portfolio';
-import './Home.css';
+import { TypeAnimation } from 'react-type-animation';
+import { useEffect, useState, useMemo } from 'react';
+import { ArrowRight, ArrowUpRight, Code2, Layers, Rocket } from 'lucide-react';
+import { api } from '../lib/api';
+import { useReveal } from '../lib/useReveal';
+import Marquee from '../components/ui/Marquee';
+import StatsStrip from '../components/ui/StatsStrip';
+import CtaBanner from '../components/ui/CtaBanner';
+import ProjectCard from '../components/cards/ProjectCard';
 
-// Typewriter hook
-function useTypewriter(texts) {
-  const [displayed, setDisplayed] = useState('');
-  const [textIndex, setTextIndex] = useState(0);
-  const [charIndex, setCharIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
 
-  useEffect(() => {
-    const current = texts[textIndex];
-    let speed = isDeleting ? 50 : 100;
 
-    if (!isDeleting && charIndex === current.length) {
-      speed = 1500;
-      setTimeout(() => setIsDeleting(true), speed);
-      return;
-    }
-    if (isDeleting && charIndex === 0) {
-      setIsDeleting(false);
-      setTextIndex((i) => (i + 1) % texts.length);
-      setCharIndex(0); // ✅ Fix: explicitly reset charIndex
-      return;
-    }
 
-    const timeout = setTimeout(() => {
-      setDisplayed(current.substring(0, isDeleting ? charIndex - 1 : charIndex + 1));
-      setCharIndex((c) => (isDeleting ? c - 1 : c + 1));
-    }, speed);
 
-    return () => clearTimeout(timeout);
-  }, [charIndex, isDeleting, textIndex, texts]);
 
-  return displayed;
-}
 
-// Particle canvas
-function ParticlesBg() {
-  const canvasRef = useRef(null);
+export default function Home() {
+  const [projects, setProjects] = useState([]);
+  const [skillGroups, setSkillGroups] = useState([]);
+  const [certs, setCerts] = useState([]);
+  const [siteConfig, setSiteConfig] = useState({});
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    let W = canvas.width = canvas.offsetWidth || window.innerWidth;
-    let H = canvas.height = canvas.offsetHeight || window.innerHeight;
-
-    const particles = Array.from({ length: 80 }, () => ({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      r: Math.random() * 3 + 1,
-      dx: (Math.random() - 0.5) * 1.5,
-      dy: (Math.random() - 0.5) * 1.5,
-      opacity: Math.random() * 0.5 + 0.2,
-    }));
-
-    let animId; // ✅ Fix: declare animId before use
-
-    const draw = () => {
-      ctx.clearRect(0, 0, W, H);
-      particles.forEach((p) => {
-        p.x += p.dx;
-        p.y += p.dy;
-        if (p.x < 0 || p.x > W) p.dx *= -1;
-        if (p.y < 0 || p.y > H) p.dy *= -1;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(123,92,244,${p.opacity})`;
-        ctx.fill();
-      });
-
-      // Lines between close particles
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120) {
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(123,92,244,${0.3 * (1 - dist / 120)})`;
-            ctx.lineWidth = 0.8;
-            ctx.stroke();
-          }
-        }
-      }
-      animId = requestAnimationFrame(draw);
-    };
-
-    draw();
-
-    const onResize = () => {
-      W = canvas.width = canvas.offsetWidth;
-      H = canvas.height = canvas.offsetHeight;
-    };
-    window.addEventListener('resize', onResize);
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener('resize', onResize);
-    };
+    api.getProjects().then(setProjects).catch(() => {});
+    api.getSkills().then(setSkillGroups).catch(() => {});
+    api.getCertifications().then(setCerts).catch(() => {});
+    api.getConfig().then(setSiteConfig).catch(() => {});
   }, []);
 
-  return <canvas ref={canvasRef} className="particles-canvas" />;
-}
+  useReveal([projects, skillGroups, certs]);
 
-// Animated card on scroll
-function AnimatedCard({ children, className, delay = 0 }) {
-  const ref = useRef(null);
-  const [visible, setVisible] = useState(false);
+  const instituteCount = useMemo(
+    () => new Set(certs.map((c) => c.institute)).size,
+    [certs]
+  );
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { threshold: 0.1 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
+  const stats = [
+    { value: projects.length ? `${projects.length}+` : '—', label: 'Projects Shipped' },
+    { value: certs.length || '—', label: 'Certifications' },
+    { value: instituteCount || '—', label: 'Institutes' },
+    { value: skillGroups.length ? skillGroups.length : '—', label: 'Skill Categories' },
+  ];
+
+  const quicklinks = [
+    { to: '/skills', label: 'Skills', d: 'Frontend, backend, mobile, and tools — the working stack.' },
+    { to: '/projects', label: 'Projects', d: 'Shipped platforms across web and Android.' },
+    { to: '/experience', label: 'Experience', d: 'Where the work has happened so far.' },
+    { to: '/certification', label: 'Certification', d: `${certs.length || 6} credentials across ${instituteCount || 6} institutes.` },
+  ];
+
+  const typeSequence = useMemo(() => {
+    const rawTexts = siteConfig.heroTypewriterTexts || 'I build scalable web and mobile products., I design user-centric interfaces., I write stories and poems that reflect the truth., I hold certificates that prove the rest.';
+    const parts = rawTexts.split(',').map(s => s.trim()).filter(Boolean);
+    const seq = [];
+    for (const part of parts) {
+      seq.push(part);
+      seq.push(2000);
+    }
+    return seq.length ? seq : ['Developer', 2000];
+  }, [siteConfig.heroTypewriterTexts]);
+
+  const stack = useMemo(() => {
+    const raw = siteConfig.techMarquee || 'React, Next.js, Node.js, MySQL, Kotlin, Jetpack Compose, Tailwind CSS, Express';
+    return raw.split(',').map(s => s.trim()).filter(Boolean);
+  }, [siteConfig.techMarquee]);
+
+  const approach = useMemo(() => {
+    return [
+      {
+        icon: Code2,
+        title: siteConfig.approachCard1Title || 'Clean, maintainable code',
+        d: siteConfig.approachCard1Desc || 'Modular components and clear structure — code that a future developer (including future me) can actually follow.',
+      },
+      {
+        icon: Layers,
+        title: siteConfig.approachCard2Title || 'End-to-end ownership',
+        d: siteConfig.approachCard2Desc || 'Comfortable across the whole stack, from database schema to the pixel on screen — no hand-off gaps.',
+      },
+      {
+        icon: Rocket,
+        title: siteConfig.approachCard3Title || 'Ships, then improves',
+        d: siteConfig.approachCard3Desc || 'Working software first, polish second. Iteration beats a perfect plan that never leaves the doc.',
+      },
+    ];
+  }, [siteConfig]);
 
   return (
-    <div
-      ref={ref}
-      className={className}
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(20px)',
-        transition: `opacity 0.5s ease ${delay}ms, transform 0.5s ease ${delay}ms`,
-      }}
-    >
-      {children}
+    <div>
+      {/* ───────── Hero ───────── */}
+      <section className="relative overflow-hidden border-b border-base-300">
+        <div className="bg-dot-grid pointer-events-none absolute inset-0 text-base-content/[0.06]" />
+        <div className="pointer-events-none absolute -top-24 right-[-10%] h-[420px] w-[420px] rounded-full bg-primary/10 blur-[110px]" />
+
+        <div className="relative mx-auto grid max-w-6xl gap-14 px-6 pt-32 pb-20 md:grid-cols-[1.15fr_0.85fr] md:pt-40 md:pb-28">
+          <div>
+            <div className="rv inline-flex items-center gap-2.5 font-mono text-[0.72rem] uppercase tracking-[0.14em] text-primary">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+              </span>
+              {siteConfig.heroTitle || 'Full-Stack Developer'}
+            </div>
+
+            <h1 className="rv rv-d1 mt-5 text-[clamp(2.5rem,6vw,4.2rem)] font-semibold leading-[1.04] tracking-tight">
+              Hi, I'm {siteConfig.heroName || 'Saykot'}.
+              <span className="mt-2 block text-[0.42em] font-medium leading-snug text-base-content/55">
+                <TypeAnimation
+                  sequence={typeSequence}
+                  wrapper="span"
+                  speed={50}
+                  repeat={Infinity}
+                />
+              </span>
+            </h1>
+
+            <p className="rv rv-d2 mt-6 max-w-lg text-[1.05rem] leading-relaxed text-base-content/65">
+              {siteConfig.heroDescription || 'I build web and mobile products end to end — React and Next.js on the frontend, Node.js and MySQL underneath. Currently working as a freelance developer, and studying Computer Engineering on the side.'}
+            </p>
+
+            <div className="rv rv-d3 mt-9 flex flex-wrap items-center gap-4">
+              <Link
+                to="/projects"
+                className="btn btn-primary rounded-full px-6 font-mono text-sm normal-case"
+              >
+                View Projects <ArrowRight size={15} />
+              </Link>
+              <a
+                href={`${import.meta.env.BASE_URL}${siteConfig.cvUrl || 'Saykot_CV.pdf'}`}
+                download={siteConfig.cvUrl || 'Saykot_CV.pdf'}
+                className="btn btn-outline rounded-full border-base-300 px-6 font-mono text-sm normal-case hover:border-primary hover:bg-transparent hover:text-primary"
+              >
+                Download CV
+              </a>
+            </div>
+          </div>
+
+          {/* Profile Image */}
+          <div className="rv rv-d2 relative">
+            <div className="rounded-box border border-base-300 bg-base-100/90 p-6 shadow-xl shadow-base-content/[0.03] backdrop-blur-sm">
+              <img src={siteConfig.heroImageUrl || `${import.meta.env.BASE_URL}saykot-photo.png`} alt="Saykot" className="aspect-square h-full w-full object-cover object-center rounded-lg" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── Tech marquee ───────── */}
+      <Marquee items={stack} />
+
+      {/* ───────── Quicklinks ───────── */}
+      <section className="mx-auto max-w-6xl px-6 py-20 md:py-24">
+        <div className="grid gap-5 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
+          {quicklinks.map((item, i) => (
+            <Link
+              to={item.to}
+              key={item.to}
+              className="rv group flex flex-col rounded-box border border-base-300 bg-base-100 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5"
+              style={{ transitionDelay: `${i * 70}ms` }}
+            >
+              
+              <h3 className="mt-4 font-display text-lg font-semibold transition-colors group-hover:text-primary">
+                {item.label}
+              </h3>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-base-content/55">{item.d}</p>
+              <ArrowUpRight
+                size={18}
+                className="mt-4 text-base-content/30 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-primary"
+              />
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ───────── By the numbers ───────── */}
+      <section className="border-y border-base-300 bg-base-200/30">
+        <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
+          <StatsStrip stats={stats} />
+        </div>
+      </section>
+
+      {/* ───────── Featured work ───────── */}
+      {projects.length > 0 && (
+        <section className="mx-auto max-w-6xl px-6 py-20 md:py-24">
+          <div className="rv flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <span className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-primary">
+                Featured Work
+              </span>
+              <h2 className="mt-2 font-display text-2xl font-semibold md:text-3xl">
+                A few things I've built.
+              </h2>
+            </div>
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-1.5 font-mono text-sm text-base-content/60 transition-colors hover:text-primary"
+            >
+              View all <ArrowRight size={14} />
+            </Link>
+          </div>
+
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {projects.slice(0, 3).map((p, i) => (
+              <ProjectCard key={p.id} project={p} index={i} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ───────── Currently building ───────── */}
+      <section className="border-t border-base-300 bg-base-200/40">
+        <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
+          <div className="rv flex flex-col items-start justify-between gap-6 rounded-box border border-base-300 bg-base-100 p-8 md:flex-row md:items-center md:p-10">
+            <div>
+              <span className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-primary">
+                Currently Building
+              </span>
+              <h2 className="mt-2 font-display text-2xl font-semibold">
+                {siteConfig.currentProjectName || 'People E Sheba'}
+              </h2>
+              <p className="mt-2 max-w-md text-sm leading-relaxed text-base-content/60">
+                {siteConfig.currentProjectDesc || 'A comprehensive React-based community services platform built with Node.js, MySQL, and Tailwind CSS.'}
+              </p>
+            </div>
+            <Link
+              to="/projects"
+              className="btn btn-outline shrink-0 rounded-full border-base-300 font-mono text-sm normal-case hover:border-primary hover:bg-transparent hover:text-primary"
+            >
+              See all projects <ArrowRight size={15} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── Approach ───────── */}
+      <section className="mx-auto max-w-6xl px-6 py-20 md:py-24">
+        <div className="rv max-w-lg">
+          <span className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-primary">
+            How I Work
+          </span>
+          <h2 className="mt-2 font-display text-2xl font-semibold md:text-3xl">
+            {siteConfig.approachTitle || 'Three things I hold to on every build.'}
+          </h2>
+        </div>
+
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          {approach.map(({ icon: Icon, title, d }, i) => (
+            <div
+              key={title}
+              className="rv rounded-box border border-base-300 bg-base-100 p-6"
+              style={{ transitionDelay: `${i * 90}ms` }}
+            >
+              <span className="grid h-11 w-11 place-items-center rounded-field border border-base-300 bg-base-200 text-primary">
+                <Icon size={19} strokeWidth={1.75} />
+              </span>
+              <h3 className="mt-4 font-display text-lg font-semibold">{title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-base-content/60">{d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <div className="mx-auto max-w-6xl px-6 pb-24">
+        <CtaBanner
+          title={siteConfig.ctaTitle || "Ready to build something worth shipping?"}
+          subtitle={siteConfig.ctaSubtitle || "I'm currently available for freelance projects and full-time roles."}
+        />
+      </div>
     </div>
   );
 }
 
-export default function Home() {
-  const typeText = useTypewriter(personalInfo.typewriterTexts);
-  const featuredProjects = projects.slice(0, 3);
-
-  return (
-    <>
-      <SEO
-        title="Home"
-        description="RK Saykot — Passionate Web Developer & Computer Engineering student from Bangladesh. Building modern, responsive websites."
-        keywords="RK Saykot, Web Developer, Portfolio, Bangladesh, Frontend Developer"
-      />
-      {/* Hero */}
-      <section id="home" className="hero-section">
-        <ParticlesBg />
-        <div className="container">
-          <div className="hero-content">
-            <div className="hero-text">
-              <h1>Hi, I'm <span style={{ color: 'var(--primary)' }}>RK Saykot</span></h1>
-              <div className="typewriter">
-                <span className="typewriter-text">{typeText}</span>
-                <span className="cursor">|</span>
-              </div>
-              <p>I create modern, responsive, and user-friendly websites that deliver exceptional user experiences and drive business results.</p>
-              <div className="hero-btns">
-                <Link to="/projects" className="btn btn-primary">View My Work</Link>
-                <a
-                  href="/RK-Saykot-Portfolio/documents/Resume.pdf"
-                  download="RK_Saykot_Resume"
-                  className="btn btn-secondary"
-                >
-                  Download CV
-                </a>
-              </div>
-            </div>
-            <div className="hero-image">
-              <div className="profile-bg"></div>
-              <img src={personalInfo.profileImage} alt="RK Saykot" className="profile-img" />
-            </div>
-          </div>
-        </div>
-        <div className="scroll-down">
-          <span>Scroll Down</span>
-          <i className="fas fa-chevron-down"></i>
-        </div>
-      </section>
-
-      {/* About Preview */}
-      <section id="about-preview" className="about-preview-section">
-        <div className="container">
-          <h2 className="section-title">About Me</h2>
-          <div className="about-content">
-            <div className="about-text">
-              <p>I'm a Computer Engineering student and aspiring Web Developer passionate about building elegant and functional applications. I love learning new technologies and turning ideas into reality.</p>
-              <p>With a strong foundation in both frontend and backend development, I create digital solutions that are not only visually appealing but also highly functional and user-friendly.</p>
-              <Link to="/about" className="btn btn-primary">Read More</Link>
-            </div>
-            <div className="about-image">
-              <img src={personalInfo.aboutImage} alt="About" className="about-img" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Skills Preview */}
-      <section id="skills" className="skills-preview-section">
-        <div className="container">
-          <h2 className="section-title">My Skills</h2>
-          <div className="skills-container">
-            {skillCards.map((card, i) => (
-              <AnimatedCard key={i} className="skill-card" delay={i * 150}>
-                <div className="skill-icon"><i className={card.icon}></i></div>
-                <h3>{card.title}</h3>
-                <p>{card.desc}</p>
-              </AnimatedCard>
-            ))}
-          </div>
-          <div className="view-all">
-            <Link to="/skills" className="btn btn-secondary">View All Skills</Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Projects */}
-      <section id="projects" className="projects-preview-section">
-        <div className="container">
-          <h2 className="section-title">Featured Projects</h2>
-          <div className="projects-container">
-            {featuredProjects.map((project, i) => (
-              <AnimatedCard key={project.id} className="project-card" delay={i * 200}>
-                <img src={project.image} alt={project.title} className="project-img" />
-                <div className="project-content">
-                  <h3>{project.title}</h3>
-                  <p>{project.desc}</p>
-                  <div className="project-links">
-                    <a href={project.liveUrl} className="project-link" target="_blank" rel="noreferrer">
-                      <i className="fas fa-external-link-alt"></i> Live Demo
-                    </a>
-                    <a href={project.githubUrl} className="project-link" target="_blank" rel="noreferrer">
-                      <i className="fab fa-github"></i> View Code
-                    </a>
-                  </div>
-                </div>
-              </AnimatedCard>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA / Contact */}
-      <section id="contact" className="cta-section">
-        <div className="container">
-          <div className="cta-content">
-            <h2>Let's build something amazing together</h2>
-            <p>I'm always open to discussing new opportunities and interesting projects. Let's turn your ideas into reality!</p>
-            <div className="cta-btns">
-              <Link to="/contact" className="btn btn-primary">Contact Me</Link>
-              <a
-                href="/Documents/My Resume.pdf"
-                download="RK_Saykot_Resume"
-                className="btn btn-secondary"
-              >
-                Download Resume
-              </a> {/* ✅ Fix: path updated from "/My CV/My Resume.pdf" */}
-            </div>
-          </div>
-        </div>
-      </section>
-    </>
-  );
-}
