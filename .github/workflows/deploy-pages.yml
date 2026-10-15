@@ -33,8 +33,6 @@ jobs:
 
       - name: Build production site
         run: npm run build
-        env:
-          VITE_BASE: /RK-Saykot-Portfolio/
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5

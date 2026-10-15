@@ -1,6 +1,27 @@
 import { initialData } from '../data/initialData';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const isClient = typeof window !== 'undefined';
+const isLocalhost = isClient && (
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1' ||
+  window.location.hostname.endsWith('.local')
+);
+
+// Only call localhost when actually developing locally.
+// On live domains (like rksaykot.pro.bd or github.io), never call localhost,
+// which causes browser "Access other apps and services on this device" (Private Network Access) prompts.
+function getApiBase() {
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl) {
+    if (envUrl.includes('localhost') && !isLocalhost) {
+      return null;
+    }
+    return envUrl;
+  }
+  return isLocalhost ? 'http://localhost:5000/api' : null;
+}
+
+const API_BASE = getApiBase();
 
 // Helper to get local data cache
 function getLocalData() {
@@ -24,6 +45,11 @@ function saveLocalData(data) {
 }
 
 async function request(path, options = {}) {
+  // If on a static production host without a dedicated backend, use local data immediately
+  if (!API_BASE) {
+    return fallbackHandler(path, options);
+  }
+
   const headers = {};
   if (!(options.body instanceof FormData)) {
     headers['Content-Type'] = 'application/json';
@@ -35,7 +61,6 @@ async function request(path, options = {}) {
   }
   
   try {
-    // Add a reasonable timeout so offline / inactive server quickly falls back
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 3500);
 
@@ -53,7 +78,6 @@ async function request(path, options = {}) {
     }
     return await res.json();
   } catch (err) {
-    // Fallback handler if server is not running or on static GitHub Pages
     console.warn(`[API] Server unavailable at ${API_BASE}${path}. Using local portfolio data fallback.`, err.message);
     return fallbackHandler(path, options);
   }
@@ -61,7 +85,7 @@ async function request(path, options = {}) {
 
 function fallbackHandler(path, options) {
   const method = (options.method || 'GET').toUpperCase();
-  const url = new URL(path, 'http://localhost');
+  const url = new URL(path, 'https://saykot.internal');
   const pathname = url.pathname;
   const store = getLocalData();
 
