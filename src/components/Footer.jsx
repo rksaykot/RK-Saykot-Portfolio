@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 import { Mail, ArrowUp, ArrowUpRight } from 'lucide-react';
-import { GithubIcon, LinkedinIcon, FacebookIcon } from './ui/BrandIcons';
+import { GithubIcon, FacebookIcon, InstagramIcon } from './ui/BrandIcons';
 
 const socials = [
   { href: 'https://github.com/rksaykot', label: 'GitHub', Icon: GithubIcon },
   { href: 'mailto:rksaikatkhan999@gmail.com', label: 'Email', Icon: Mail },
-  { href: 'https://www.facebook.com/rksaykot999/', label: 'Facebook', Icon: FacebookIcon },
-  { href: '#', label: 'LinkedIn', Icon: LinkedinIcon },
+  { href: 'https://www.facebook.com/rksaykot.stranger/', label: 'Facebook', Icon: FacebookIcon },
+  { href: 'https://www.instagram.com/rk_saykot/', label: 'Instagram', Icon: InstagramIcon },
 ];
 
 const columns = [

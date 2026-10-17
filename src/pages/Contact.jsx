@@ -11,7 +11,7 @@ const infoRows = [
   { icon: MapPin, k: 'Live in', v: 'Dhaka' },
   { icon: Briefcase, k: 'Current role', v: 'Full-Stack Developer' },
   { icon: Clock, k: 'Response time', v: 'Within 24–48 hours' },
-  { icon: Link2, k: 'Find me on', v: 'GitHub · LinkedIn' },
+  { icon: Link2, k: 'Find me on', v: 'GitHub · Instagram' },
 ];
 
 const faqs = [
