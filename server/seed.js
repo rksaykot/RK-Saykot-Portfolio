@@ -66,7 +66,7 @@ const projects = [
     type: 'Web App',
     description: 'A comprehensive system to manage student data and records.',
     tech: ['PHP', 'CSS3', 'JavaScript (ES6+)', 'Tailwind CSS', 'Daisy UI', 'MySQL', 'Git / Version Control'],
-    links: { demo: 'https://student-managemant-system.free.nf/', github: 'https://github.com/rksaykot999/Student-Management-System' }
+    links: { demo: 'https://student-managemant-system.free.nf/', github: 'https://github.com/rksaykot/Student-Management-System' }
   },
   {
     id: 2,
@@ -90,7 +90,7 @@ const projects = [
     type: 'Web App',
     description: 'A React-based community services platform.',
     tech: ['React JS', 'Node JS', 'MySQL', 'Tailwind CSS', 'Daisy UI', 'Git / Version Control'],
-    links: { demo: 'https://people-esheba.vercel.app/', github: 'https://github.com/rksaykot999/people-esheba' }
+    links: { demo: 'https://people-esheba.vercel.app/', github: 'https://github.com/rksaykot/people-esheba' }
   },
   {
     id: 5,
@@ -98,7 +98,7 @@ const projects = [
     type: 'Web & Mobile App',
     description: 'A real-time messaging application featuring secure authentication, live chat, friend requests, voice/video calling, and push notifications.',
     tech: ['Next.js', 'Android Studio', 'Capacitor', 'Google Firebase', 'Tailwind CSS', 'TypeScript'],
-    links: { demo: 'https://my-messenger-web.vercel.app/', github: 'https://github.com/rksaykot999/My_Messenger' }
+    links: { demo: 'https://my-messenger-web.vercel.app/', github: 'https://github.com/rksaykot/My_Messenger' }
   },
   {
     id: 6,
@@ -106,7 +106,7 @@ const projects = [
     type: 'Mobile App',
     description: 'A handy reminder application to keep track of tasks and schedules.',
     tech: ['React Native', 'Node JS', 'Google Firebase'],
-    links: { apk: '/My Messenger_v1.4.apk', github: 'https://github.com/rksaykot999/My_Reminder' }
+    links: { apk: '/My Messenger_v1.4.apk', github: 'https://github.com/rksaykot/My_Reminder' }
   }
 ];
 

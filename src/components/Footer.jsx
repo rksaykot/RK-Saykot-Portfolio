@@ -3,7 +3,7 @@ import { Mail, ArrowUp, ArrowUpRight } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, FacebookIcon } from './ui/BrandIcons';
 
 const socials = [
-  { href: 'https://github.com/rksaykot999', label: 'GitHub', Icon: GithubIcon },
+  { href: 'https://github.com/rksaykot', label: 'GitHub', Icon: GithubIcon },
   { href: 'mailto:rksaikatkhan999@gmail.com', label: 'Email', Icon: Mail },
   { href: 'https://www.facebook.com/rksaykot999/', label: 'Facebook', Icon: FacebookIcon },
   { href: '#', label: 'LinkedIn', Icon: LinkedinIcon },

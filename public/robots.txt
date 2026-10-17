@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /admin/*
 
-Sitemap: https://rksaykot999.github.io/RK-Saykot-Portfolio/sitemap.xml
+Sitemap: https://rksaykot.github.io/RK-Saykot-Portfolio/sitemap.xml

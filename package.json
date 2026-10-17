@@ -2,7 +2,7 @@
   "name": "rk-saykot-portfolio",
   "private": true,
   "version": "2.0.0",
-  "homepage": "https://rksaykot999.github.io/RK-Saykot-Portfolio/",
+  "homepage": "https://rksaykot.github.io/RK-Saykot-Portfolio/",
   "type": "module",
   "scripts": {
     "dev": "concurrently --names \"CLIENT,SERVER\" --prefix-colors \"cyan,yellow\" \"npm run dev:client\" \"npm run dev:server\"",

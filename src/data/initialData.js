@@ -81,7 +81,7 @@ export const initialData = {
       ],
       links: {
         demo: "https://student-managemant-system.free.nf/",
-        github: "https://github.com/rksaykot999/Student-Management-System"
+        github: "https://github.com/rksaykot/Student-Management-System"
       }
     },
     {
@@ -135,7 +135,7 @@ export const initialData = {
       ],
       links: {
         demo: "https://people-esheba.vercel.app/",
-        github: "https://github.com/rksaykot999/people-esheba"
+        github: "https://github.com/rksaykot/people-esheba"
       }
     },
     {
@@ -153,7 +153,7 @@ export const initialData = {
       ],
       links: {
         demo: "https://my-messenger-web.vercel.app/",
-        github: "https://github.com/rksaykot999/My_Messenger"
+        github: "https://github.com/rksaykot/My_Messenger"
       }
     },
     {
@@ -168,7 +168,7 @@ export const initialData = {
       ],
       links: {
         apk: "/My Messenger_v1.4.apk",
-        github: "https://github.com/rksaykot999/My_Reminder"
+        github: "https://github.com/rksaykot/My_Reminder"
       }
     }
   ],

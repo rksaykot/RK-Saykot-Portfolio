@@ -26,7 +26,7 @@ const defaultData = {
     aboutBio: "I'm RK Saykot — a freelance web developer and a Computer Engineering student living in Dhaka.",
     contactLocation: "Dhaka",
     socialLinks: {
-      github: "https://github.com/rksaykot999",
+      github: "https://github.com/rksaykot",
       linkedin: "https://linkedin.com/in/rksaykot"
     }
   },
